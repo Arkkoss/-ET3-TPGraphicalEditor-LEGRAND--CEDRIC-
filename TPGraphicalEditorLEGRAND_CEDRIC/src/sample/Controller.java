@@ -24,6 +24,7 @@ public class Controller {
 	
 	private Modele modele;
 	
+	
 	private EventHandler radioButtonSMListener;
 	private EventHandler radioButtonEListener;
 	private EventHandler radioButtonRListener;
@@ -38,7 +39,7 @@ public class Controller {
 	private Ellipse currentEllipse;
 	private Shape selectedShape;
 	
-	
+	//conteneurs fxml
 	@FXML
 	private HBox HBDessin;
 	
@@ -154,9 +155,9 @@ public class Controller {
                  
 		//On implemente les listener de la zone de dessin, verifiant quel bouton radio est selectionne
 
-					
+				
 					pnDessin.setOnMousePressed(e -> {
-						if(modele.getValeurLine()) {
+						if(modele.getValeurLine()) {				//creation de line
 							currentLine = new Line(e.getX(), e.getY(), e.getX(), e.getY());
 							currentLine.setStroke(modele.getValeurColor());
 							currentLine.setStrokeWidth(3);
@@ -183,7 +184,7 @@ public class Controller {
 							modele.getLstFormes().add(currentLine);
 							pnDessin.getChildren().add(currentLine);
 						}
-						else if (modele.getValeurRectangle()) {
+						else if (modele.getValeurRectangle()) { 		//creation de rectangle
 							currentRectangle = new Rectangle(e.getX(), e.getY(), 0, 0);
 							currentRectangle.setFill(modele.getValeurColor());
 							currentRectangle.setStroke(Color.BLACK);
@@ -212,7 +213,7 @@ public class Controller {
 							modele.getLstFormes().add(currentRectangle);
 							pnDessin.getChildren().add(currentRectangle);
 						}
-						else if (modele.getValeurEllipse() ) {
+						else if (modele.getValeurEllipse() ) {				//creation de ellipse
 							currentEllipse = new Ellipse(e.getX(), e.getY(), 0, 0);
 							currentEllipse.setFill(modele.getValeurColor());
 							currentEllipse.setStroke(Color.BLACK);
@@ -244,20 +245,20 @@ public class Controller {
 					});
 					
 					pnDessin.setOnMouseDragged(e -> {
-						if(modele.getValeurLine()) {
+						if(modele.getValeurLine()) {		//creation de line
 							if (currentLine != null) {
 								currentLine.setEndX(e.getX());
 								currentLine.setEndY(e.getY());
 							}
 						}
-						else if(modele.getValeurRectangle()) {
+						else if(modele.getValeurRectangle()) {		//creation de rectangle
 							if (currentRectangle != null) {
 								currentRectangle.setWidth(e.getX()- currentRectangle.getX());
 								currentRectangle.setHeight(e.getY() - currentRectangle.getY());
 								
 							}
 						}
-						else if(modele.getValeurEllipse()) {
+						else if(modele.getValeurEllipse()) {		//creation de ellipse
 							if (currentEllipse != null) {
 								currentEllipse.setRadiusX(Math.abs(e.getX()- currentEllipse.getCenterX()));
 								currentEllipse.setRadiusY(Math.abs(e.getY() - currentEllipse.getCenterY()));
@@ -312,7 +313,7 @@ public class Controller {
 			@Override
             public void handle(Event event) {
 				if(selectedShape != null) {
-					if(selectedShape.getClass().getSimpleName().equals("Line")) {
+					if(selectedShape instanceof Line ) {			//duplication de line
 						Line temp = (Line) selectedShape;
 						Line dupli = new Line(temp.getStartX()+10,temp.getStartY()+10,temp.getEndX()+10,temp.getEndY()+10);
 						dupli.setStroke(temp.getStroke());
@@ -329,7 +330,7 @@ public class Controller {
 						
 						dupli.setOnMouseDragged(eml -> {
 							Line tempdupli = (Line) eml.getSource();
-							double startX = eml.getX()-tempdupli.getStartX();//((Line) selectedShape)
+							double startX = eml.getX()-tempdupli.getStartX();
 							double startY = eml.getY()-tempdupli.getStartY();
 							
 							tempdupli.setStartX(eml.getX());
@@ -343,7 +344,7 @@ public class Controller {
 						if(selectedShape != null) selectedShape.setStrokeWidth(3);
 						selectedShape = null;
 					}
-					else if(selectedShape.getClass().getSimpleName().equals("Rectangle")) {
+					else if(selectedShape instanceof Rectangle) {			//duplication de rectangle
 						Rectangle temp = (Rectangle) selectedShape;
 						Rectangle dupli = new Rectangle(temp.getX()+10,temp.getY()+10,temp.getWidth(),temp.getHeight());
 						dupli.setFill(temp.getFill());
@@ -361,7 +362,7 @@ public class Controller {
 						
 						dupli.setOnMouseDragged(eml -> {
 							Rectangle tempdupli = (Rectangle) eml.getSource();
-							double startX = eml.getX()-tempdupli.getX();//((Line) selectedShape)
+							double startX = eml.getX()-tempdupli.getX();
 							double startY = eml.getY()-tempdupli.getY();
 							
 							tempdupli.setX(eml.getX());
@@ -374,7 +375,8 @@ public class Controller {
 						if(selectedShape != null) selectedShape.setStrokeWidth(3);
 						selectedShape = null;
 					}
-					else if(selectedShape.getClass().getSimpleName().equals("Ellipse")) {
+					
+					else if(selectedShape instanceof Ellipse) {  //duplication de ellipse
 						Ellipse temp = (Ellipse) selectedShape;
 						Ellipse dupli = new Ellipse(temp.getCenterX()+10,temp.getCenterY()+10,temp.getRadiusX(),temp.getRadiusY());
 						dupli.setFill(temp.getFill());

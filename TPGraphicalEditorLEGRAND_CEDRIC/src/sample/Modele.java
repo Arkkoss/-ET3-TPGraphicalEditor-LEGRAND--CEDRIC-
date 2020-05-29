@@ -1,5 +1,12 @@
 package sample;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
+
 public class Modele {
 	
 	
@@ -7,6 +14,7 @@ public class Modele {
 	private boolean valeurEllipse = false;
 	private boolean valeurRectangle = false;
 	private boolean valeurLine = false;
+	private Color valeurColor;
 
 	private Controller controller;
 	
@@ -45,6 +53,16 @@ public class Modele {
 	public void setValeurLine(boolean valeurLine) {
 		this.valeurLine = valeurLine;
 	}
+
+	public Color getValeurColor() {
+		return valeurColor;
+	}
+
+	public void setValeurColor(Color valeurColor) {
+		this.valeurColor = valeurColor;
+	}
+	
+
 	
 	
 }

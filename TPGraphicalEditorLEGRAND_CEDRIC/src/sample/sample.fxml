@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ColorPicker?>
 <?import javafx.scene.control.Label?>
@@ -8,13 +7,14 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
 <HBox fx:controller="sample.Controller" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="252.0" prefWidth="474.0" xmlns="http://javafx.com/javafx/8.0.201" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox prefHeight="400.0" prefWidth="154.0">
          <children>
-            <Label fx:id="lblOptions" alignment="CENTER" contentDisplay="CENTER" prefHeight="89.0" prefWidth="153.0" text="Options :" />
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="89.0" prefWidth="153.0" text="Options :" />
             <Separator prefWidth="200.0" />
             <RadioButton fx:id="radSelectMove" mnemonicParsing="false" prefHeight="17.0" prefWidth="154.0" text="Select / Move">
                <toggleGroup>
@@ -31,6 +31,6 @@
             <Button fx:id="btnDuplicate" mnemonicParsing="false" prefHeight="25.0" prefWidth="152.0" text="Duplicate" />
          </children>
       </VBox>
-      <Canvas fx:id="cvsDessin" height="243.0" width="317.0" />
+      <Pane fx:id="pnDessin" prefHeight="252.0" prefWidth="321.0" />
    </children>
 </HBox>

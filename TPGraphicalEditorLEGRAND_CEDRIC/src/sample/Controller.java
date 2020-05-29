@@ -14,7 +14,9 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
 public class Controller {
@@ -31,6 +33,7 @@ public class Controller {
 	private EventHandler buttonDuplicateListener;
 	
 	private Line currentLine;
+	private Rectangle currentRectangle;
 	private Shape selectedShape;
 	
 	
@@ -178,6 +181,35 @@ public class Controller {
 							modele.getLstFormes().add(currentLine);
 							pnDessin.getChildren().add(currentLine);
 						}
+						else if (modele.getValeurRectangle()) {
+							currentRectangle = new Rectangle(e.getX(), e.getY(), 0, 0);
+							currentRectangle.setFill(modele.getValeurColor());
+							currentRectangle.setStroke(Color.BLACK);
+							currentRectangle.setStrokeWidth(3);
+							
+							currentRectangle.setOnMouseClicked( el -> { //SELECTION
+								selectedShape = (Rectangle) el.getSource();
+								for (Shape s :modele.getLstFormes()) {
+									s.setStrokeWidth(3);
+								}
+								selectedShape.setStrokeWidth(6);
+								System.out.println(selectedShape.getStroke());
+							});
+							
+							currentRectangle.setOnMouseDragged(eml -> {
+								Rectangle temp = (Rectangle) eml.getSource();
+								double startX = eml.getX()-temp.getX();
+								double startY = eml.getY()-temp.getY();
+								
+								temp.setX(eml.getX());
+								temp.setY(eml.getY());
+
+							});
+							
+							
+							modele.getLstFormes().add(currentRectangle);
+							pnDessin.getChildren().add(currentRectangle);
+						}
 						
 					});
 					
@@ -186,6 +218,13 @@ public class Controller {
 							if (currentLine != null) {
 								currentLine.setEndX(e.getX());
 								currentLine.setEndY(e.getY());
+							}
+						}
+						else if(modele.getValeurRectangle()) {
+							if (currentRectangle != null) {
+								currentRectangle.setWidth(e.getX()- currentRectangle.getX());
+								currentRectangle.setHeight(e.getY() - currentRectangle.getY());
+								
 							}
 						}
 					});
@@ -261,6 +300,36 @@ public class Controller {
 							tempdupli.setStartY(eml.getY());
 							tempdupli.setEndX(tempdupli.getEndX()+ startX);
 							tempdupli.setEndY(tempdupli.getEndY()+ startY);
+						});
+						
+						pnDessin.getChildren().add(dupli);
+						modele.getLstFormes().add(dupli);
+						if(selectedShape != null) selectedShape.setStrokeWidth(3);
+						selectedShape = null;
+					}
+					else if(selectedShape.getClass().getSimpleName().equals("Rectangle")) {
+						Rectangle temp = (Rectangle) selectedShape;
+						Rectangle dupli = new Rectangle(temp.getX()+10,temp.getY()+10,temp.getWidth(),temp.getHeight());
+						dupli.setFill(temp.getFill());
+						dupli.setStroke(temp.getStroke());
+						dupli.setStrokeWidth(3);
+						
+						dupli.setOnMouseClicked( el -> {
+							selectedShape = (Rectangle) el.getSource();
+							for (Shape s :modele.getLstFormes()) {
+								s.setStrokeWidth(3);
+							}
+							selectedShape.setStrokeWidth(6);
+							System.out.println(selectedShape.getStroke());
+						});
+						
+						dupli.setOnMouseDragged(eml -> {
+							Rectangle tempdupli = (Rectangle) eml.getSource();
+							double startX = eml.getX()-tempdupli.getX();//((Line) selectedShape)
+							double startY = eml.getY()-tempdupli.getY();
+							
+							tempdupli.setX(eml.getX());
+							tempdupli.setY(eml.getY());
 						});
 						
 						pnDessin.getChildren().add(dupli);

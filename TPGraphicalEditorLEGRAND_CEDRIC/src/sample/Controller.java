@@ -15,6 +15,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
@@ -34,6 +35,7 @@ public class Controller {
 	
 	private Line currentLine;
 	private Rectangle currentRectangle;
+	private Ellipse currentEllipse;
 	private Shape selectedShape;
 	
 	
@@ -187,7 +189,7 @@ public class Controller {
 							currentRectangle.setStroke(Color.BLACK);
 							currentRectangle.setStrokeWidth(3);
 							
-							currentRectangle.setOnMouseClicked( el -> { //SELECTION
+							currentRectangle.setOnMouseClicked( el -> {
 								selectedShape = (Rectangle) el.getSource();
 								for (Shape s :modele.getLstFormes()) {
 									s.setStrokeWidth(3);
@@ -210,6 +212,34 @@ public class Controller {
 							modele.getLstFormes().add(currentRectangle);
 							pnDessin.getChildren().add(currentRectangle);
 						}
+						else if (modele.getValeurEllipse() ) {
+							currentEllipse = new Ellipse(e.getX(), e.getY(), 0, 0);
+							currentEllipse.setFill(modele.getValeurColor());
+							currentEllipse.setStroke(Color.BLACK);
+							currentEllipse.setStrokeWidth(3);
+							
+							currentEllipse.setOnMouseClicked( el -> {
+								selectedShape = (Ellipse) el.getSource();
+								for (Shape s :modele.getLstFormes()) {
+									s.setStrokeWidth(3);
+								}
+								selectedShape.setStrokeWidth(6);
+								System.out.println(selectedShape.getStroke());
+							});
+							
+							currentEllipse.setOnMouseDragged(eml -> {
+								Ellipse temp = (Ellipse) eml.getSource();
+								double startX = eml.getX()-temp.getCenterX();
+								double startY = eml.getY()-temp.getCenterY();
+								
+								temp.setCenterX(eml.getX());
+								temp.setCenterY(eml.getY());
+
+							});
+							
+							modele.getLstFormes().add(currentEllipse);
+							pnDessin.getChildren().add(currentEllipse);
+						}
 						
 					});
 					
@@ -225,6 +255,12 @@ public class Controller {
 								currentRectangle.setWidth(e.getX()- currentRectangle.getX());
 								currentRectangle.setHeight(e.getY() - currentRectangle.getY());
 								
+							}
+						}
+						else if(modele.getValeurEllipse()) {
+							if (currentEllipse != null) {
+								currentEllipse.setRadiusX(Math.abs(e.getX()- currentEllipse.getCenterX()));
+								currentEllipse.setRadiusY(Math.abs(e.getY() - currentEllipse.getCenterY()));
 							}
 						}
 					});
@@ -330,6 +366,38 @@ public class Controller {
 							
 							tempdupli.setX(eml.getX());
 							tempdupli.setY(eml.getY());
+
+						});
+						
+						pnDessin.getChildren().add(dupli);
+						modele.getLstFormes().add(dupli);
+						if(selectedShape != null) selectedShape.setStrokeWidth(3);
+						selectedShape = null;
+					}
+					else if(selectedShape.getClass().getSimpleName().equals("Ellipse")) {
+						Ellipse temp = (Ellipse) selectedShape;
+						Ellipse dupli = new Ellipse(temp.getCenterX()+10,temp.getCenterY()+10,temp.getRadiusX(),temp.getRadiusY());
+						dupli.setFill(temp.getFill());
+						dupli.setStroke(temp.getStroke());
+						dupli.setStrokeWidth(3);
+						
+						dupli.setOnMouseClicked( el -> {
+							selectedShape = (Ellipse) el.getSource();
+							for (Shape s :modele.getLstFormes()) {
+								s.setStrokeWidth(3);
+							}
+							selectedShape.setStrokeWidth(6);
+							System.out.println(selectedShape.getStroke());
+						});
+						
+						dupli.setOnMouseDragged(eml -> {
+							Ellipse tempdupli = (Ellipse) eml.getSource();
+							double startX = eml.getX()-tempdupli.getCenterX();//((Line) selectedShape)
+							double startY = eml.getY()-tempdupli.getCenterY();
+							
+							tempdupli.setCenterX(eml.getX());
+							tempdupli.setCenterY(eml.getY());
+
 						});
 						
 						pnDessin.getChildren().add(dupli);

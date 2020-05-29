@@ -15,6 +15,11 @@ public class Modele {
 	private boolean valeurRectangle = false;
 	private boolean valeurLine = false;
 	private Color valeurColor;
+	private List<Shape> lstFormes = new ArrayList<Shape>();
+
+	public List<Shape> getLstFormes() {
+		return lstFormes;
+	}
 
 	private Controller controller;
 	

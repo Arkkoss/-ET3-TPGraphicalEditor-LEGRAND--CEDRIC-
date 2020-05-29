@@ -15,6 +15,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Shape;
 
 public class Controller {
 	
@@ -28,6 +29,7 @@ public class Controller {
 	private EventHandler colorPickerCListener;
 	
 	private Line currentLine;
+	private Shape selectedShape;
 	
 	
 	@FXML
@@ -76,6 +78,8 @@ public class Controller {
             	modele.setValeurEllipse(false);
             	modele.setValeurRectangle(false);
             	modele.setValeurLine(false);
+            	btnDelete.setDisable(false);
+            	btnDuplicate.setDisable(false);
             	System.out.println("testSM");
             	System.out.println(modele.getValeurLine());
             }
@@ -91,6 +95,10 @@ public class Controller {
              	modele.setValeurEllipse(true);
              	modele.setValeurRectangle(false);
              	modele.setValeurLine(false);
+             	btnDelete.setDisable(true);
+             	btnDuplicate.setDisable(true);
+               	if(selectedShape != null) selectedShape.setStrokeWidth(1);
+               	selectedShape = null;
              	System.out.println("testE");
              	System.out.println(modele.getValeurLine());
              }
@@ -106,6 +114,10 @@ public class Controller {
               	modele.setValeurEllipse(false);
               	modele.setValeurRectangle(true);
               	modele.setValeurLine(false);
+              	btnDelete.setDisable(true);
+              	btnDuplicate.setDisable(true);
+               	if(selectedShape != null) selectedShape.setStrokeWidth(1);
+               	selectedShape = null;
               	System.out.println("testR");
               	System.out.println(modele.getValeurLine());
               }
@@ -121,6 +133,10 @@ public class Controller {
                	modele.setValeurEllipse(false);
                	modele.setValeurRectangle(false);
                	modele.setValeurLine(true);
+               	btnDelete.setDisable(true);
+               	btnDuplicate.setDisable(true);
+               	if(selectedShape != null) selectedShape.setStrokeWidth(1);
+               	selectedShape = null;
                	System.out.println("testL");
                	System.out.println(modele.getValeurLine());
                }
@@ -129,13 +145,22 @@ public class Controller {
             radLine.setOnAction(radioButtonLListener);
             
                  
-		//On implemente les listener de la zone de dessin, verifiant quel forme est selectionnee
+		//On implemente les listener de la zone de dessin, verifiant quel bouton radio est selectionne
 
 					
 					pnDessin.setOnMousePressed(e -> {
 						if(modele.getValeurLine()) {
 							currentLine = new Line(e.getX(), e.getY(), e.getX(), e.getY());
 							currentLine.setStroke(modele.getValeurColor());
+							currentLine.setOnMouseClicked( el -> {
+								selectedShape = (Line) el.getSource();
+								for (Shape s :modele.getLstFormes()) {
+									s.setStrokeWidth(1);
+								}
+								selectedShape.setStrokeWidth(2);
+								System.out.println(selectedShape.getStroke());
+							});
+							modele.getLstFormes().add(currentLine);
 							pnDessin.getChildren().add(currentLine);
 						}
 						
@@ -147,6 +172,12 @@ public class Controller {
 								currentLine.setEndX(e.getX());
 								currentLine.setEndY(e.getY());
 							}
+						}
+					});
+					
+					pnDessin.setOnMouseEntered(e -> {
+						if(modele.getValeurSelectMove()) {
+							
 						}
 					});
 										
@@ -162,6 +193,9 @@ public class Controller {
 			public void handle(Event event) {
 				modele.setValeurColor(cpColor.getValue());
 				System.out.println(cpColor.getValue());
+				if(modele.getValeurSelectMove()) {
+					
+				}
 			}
 		};
 		

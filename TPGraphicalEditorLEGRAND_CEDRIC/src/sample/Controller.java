@@ -2,6 +2,7 @@ package sample;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
@@ -17,9 +18,6 @@ public class Controller {
 	
 	private EventHandler radioButtonSMListener;
 	
-
-	@FXML
-	private Label lblControls;
 	
 	@FXML
 	private RadioButton radSelectMove;
@@ -50,15 +48,20 @@ public class Controller {
 		
 		this.modele = new Modele(this);
 		
-		radioButtonSMListener = new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent e) {
-
-                System.out.println("test");
-            }
-		};
+		//On initialise le bouton selectionne par defaut
 		
-		//radSelectMove.setOnMouseClicked(radioButtonSMListener);
+        radioButtonSMListener = new EventHandler(){
+            @Override
+            public void handle(Event event) {
+            	System.out.println("test");
+            }
+         };
+         
+         radSelectMove.setOnAction(radioButtonSMListener);
+
+		
+		
+		
 		
 	}
 	

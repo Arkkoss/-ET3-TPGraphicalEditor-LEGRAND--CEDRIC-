@@ -14,23 +14,23 @@
    <children>
       <VBox prefHeight="400.0" prefWidth="154.0">
          <children>
-            <Label id="lblOptions" alignment="CENTER" contentDisplay="CENTER" prefHeight="89.0" prefWidth="153.0" text="Options :" />
+            <Label fx:id="lblOptions" alignment="CENTER" contentDisplay="CENTER" prefHeight="89.0" prefWidth="153.0" text="Options :" />
             <Separator prefWidth="200.0" />
-            <RadioButton id="radSelectMove" mnemonicParsing="false" prefHeight="17.0" prefWidth="154.0" text="Select / Move">
+            <RadioButton fx:id="radSelectMove" mnemonicParsing="false" prefHeight="17.0" prefWidth="154.0" text="Select / Move">
                <toggleGroup>
                   <ToggleGroup fx:id="pick" />
                </toggleGroup></RadioButton>
             <Separator prefWidth="200.0" />
-            <RadioButton id="radEllipse" mnemonicParsing="false" prefHeight="17.0" prefWidth="155.0" text="Ellipse" toggleGroup="$pick" />
-            <RadioButton id="radRectangle" mnemonicParsing="false" text="Rectangle" toggleGroup="$pick" />
-            <RadioButton id="radLine" mnemonicParsing="false" text="Line" toggleGroup="$pick" />
+            <RadioButton fx:id="radEllipse" mnemonicParsing="false" prefHeight="17.0" prefWidth="155.0" text="Ellipse" toggleGroup="$pick" />
+            <RadioButton fx:id="radRectangle" mnemonicParsing="false" text="Rectangle" toggleGroup="$pick" />
+            <RadioButton fx:id="radLine" mnemonicParsing="false" text="Line" toggleGroup="$pick" />
             <Separator prefWidth="200.0" />
-            <ColorPicker id="cpColor" prefHeight="25.0" prefWidth="152.0" />
+            <ColorPicker fx:id="cpColor" prefHeight="25.0" prefWidth="152.0" />
             <Separator prefWidth="200.0" />
-            <Button id="btnDelete" mnemonicParsing="false" prefHeight="25.0" prefWidth="150.0" text="Delete" />
-            <Button id="btnDuplicate" mnemonicParsing="false" prefHeight="25.0" prefWidth="152.0" text="Duplicate" />
+            <Button fx:id="btnDelete" mnemonicParsing="false" prefHeight="25.0" prefWidth="150.0" text="Delete" />
+            <Button fx:id="btnDuplicate" mnemonicParsing="false" prefHeight="25.0" prefWidth="152.0" text="Duplicate" />
          </children>
       </VBox>
-      <Canvas id="cvsDessin" height="243.0" width="317.0" />
+      <Canvas fx:id="cvsDessin" height="243.0" width="317.0" />
    </children>
 </HBox>

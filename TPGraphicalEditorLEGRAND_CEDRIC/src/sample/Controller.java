@@ -27,6 +27,8 @@ public class Controller {
 	private EventHandler radioButtonLListener;
 	private EventHandler paneDListener;
 	private EventHandler colorPickerCListener;
+	private EventHandler buttonDeleteListener;
+	private EventHandler buttonDuplicateListener;
 	
 	private Line currentLine;
 	private Shape selectedShape;
@@ -97,7 +99,7 @@ public class Controller {
              	modele.setValeurLine(false);
              	btnDelete.setDisable(true);
              	btnDuplicate.setDisable(true);
-               	if(selectedShape != null) selectedShape.setStrokeWidth(1);
+               	if(selectedShape != null) selectedShape.setStrokeWidth(3);
                	selectedShape = null;
              	System.out.println("testE");
              	System.out.println(modele.getValeurLine());
@@ -116,7 +118,7 @@ public class Controller {
               	modele.setValeurLine(false);
               	btnDelete.setDisable(true);
               	btnDuplicate.setDisable(true);
-               	if(selectedShape != null) selectedShape.setStrokeWidth(1);
+               	if(selectedShape != null) selectedShape.setStrokeWidth(3);
                	selectedShape = null;
               	System.out.println("testR");
               	System.out.println(modele.getValeurLine());
@@ -135,7 +137,7 @@ public class Controller {
                	modele.setValeurLine(true);
                	btnDelete.setDisable(true);
                	btnDuplicate.setDisable(true);
-               	if(selectedShape != null) selectedShape.setStrokeWidth(1);
+               	if(selectedShape != null) selectedShape.setStrokeWidth(3);
                	selectedShape = null;
                	System.out.println("testL");
                	System.out.println(modele.getValeurLine());
@@ -152,14 +154,27 @@ public class Controller {
 						if(modele.getValeurLine()) {
 							currentLine = new Line(e.getX(), e.getY(), e.getX(), e.getY());
 							currentLine.setStroke(modele.getValeurColor());
+							currentLine.setStrokeWidth(3);
 							currentLine.setOnMouseClicked( el -> {
 								selectedShape = (Line) el.getSource();
 								for (Shape s :modele.getLstFormes()) {
-									s.setStrokeWidth(1);
+									s.setStrokeWidth(3);
 								}
-								selectedShape.setStrokeWidth(2);
+								selectedShape.setStrokeWidth(6);
 								System.out.println(selectedShape.getStroke());
 							});
+							
+							currentLine.setOnMouseDragged(eml -> {
+								Line temp = (Line) eml.getSource();
+								double startX = eml.getX()-temp.getStartX();//((Line) selectedShape)
+								double startY = eml.getY()-temp.getStartY();
+								
+								temp.setStartX(eml.getX());
+								temp.setStartY(eml.getY());
+								temp.setEndX(temp.getEndX()+ startX);
+								temp.setEndY(temp.getEndY()+ startY);
+							});
+							
 							modele.getLstFormes().add(currentLine);
 							pnDessin.getChildren().add(currentLine);
 						}
@@ -175,11 +190,6 @@ public class Controller {
 						}
 					});
 					
-					pnDessin.setOnMouseEntered(e -> {
-						if(modele.getValeurSelectMove()) {
-							
-						}
-					});
 										
 
 		
@@ -194,12 +204,76 @@ public class Controller {
 				modele.setValeurColor(cpColor.getValue());
 				System.out.println(cpColor.getValue());
 				if(modele.getValeurSelectMove()) {
-					
+					if(selectedShape != null) {
+						if(selectedShape.getClass().getSimpleName().equals("Line")) {
+							selectedShape.setStroke(modele.getValeurColor());
+						}
+						else {
+							selectedShape.setFill(modele.getValeurColor());
+						}
+					}
 				}
 			}
 		};
 		
 		cpColor.setOnAction(colorPickerCListener);
+		
+		// On ajoute le listener du bouton delete
+		
+		buttonDeleteListener = new EventHandler() {
+			@Override
+            public void handle(Event event) {
+				pnDessin.getChildren().remove(selectedShape);
+				modele.getLstFormes().remove(selectedShape);
+				selectedShape = null;
+			}
+		};
+		
+		btnDelete.setOnAction(buttonDeleteListener);
+		
+		// On ajoute le listeenr du bouton duplicate
+		
+		buttonDuplicateListener = new EventHandler() {
+			@Override
+            public void handle(Event event) {
+				if(selectedShape != null) {
+					if(selectedShape.getClass().getSimpleName().equals("Line")) {
+						Line temp = (Line) selectedShape;
+						Line dupli = new Line(temp.getStartX()+10,temp.getStartY()+10,temp.getEndX()+10,temp.getEndY()+10);
+						dupli.setStroke(temp.getStroke());
+						dupli.setStrokeWidth(3);
+						
+						dupli.setOnMouseClicked( el -> {
+							selectedShape = (Line) el.getSource();
+							for (Shape s :modele.getLstFormes()) {
+								s.setStrokeWidth(3);
+							}
+							selectedShape.setStrokeWidth(6);
+							System.out.println(selectedShape.getStroke());
+						});
+						
+						dupli.setOnMouseDragged(eml -> {
+							Line tempdupli = (Line) eml.getSource();
+							double startX = eml.getX()-tempdupli.getStartX();//((Line) selectedShape)
+							double startY = eml.getY()-tempdupli.getStartY();
+							
+							tempdupli.setStartX(eml.getX());
+							tempdupli.setStartY(eml.getY());
+							tempdupli.setEndX(tempdupli.getEndX()+ startX);
+							tempdupli.setEndY(tempdupli.getEndY()+ startY);
+						});
+						
+						pnDessin.getChildren().add(dupli);
+						modele.getLstFormes().add(dupli);
+						if(selectedShape != null) selectedShape.setStrokeWidth(3);
+						selectedShape = null;
+					}
+				}
+			}
+		};
+		
+		btnDuplicate.setOnAction(buttonDuplicateListener);
+		
 		
 	}
 	
